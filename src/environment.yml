@@ -1,0 +1,16 @@
+name: room-occupancy-prediction
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - paho-mqtt
+  - psycopg2
+  - jupyter
+  - pip
+  - pip:
+    - timescale-postgres
