@@ -25,27 +25,6 @@ To get started with the Room Occupancy Prediction project, follow these steps:
 7. **Model Inference**: Apply the trained models to make real-time predictions and perform batch inference. Refer to the [Model Inference Guide](docs/model-inference.md) for more information.
 8. **Monitoring and Logging**: Set up monitoring and logging mechanisms to track the model's performance and detect anomalies. Refer to the [Monitoring and Logging Guide](docs/monitoring-logging.md) for details.
 
-## Project Structure
-
-The project structure is organized as follows:
-```
-room-occupancy-prediction/
-├── data/
-├── docs/
-├── notebooks/
-├── src/
-├── tests/
-└── ...
-```
-
-- The `data` directory contains the raw and processed data.
-- The `docs` directory contains the project documentation and guides.
-- The `notebooks` directory contains Jupyter notebooks for exploratory data analysis and experimentation.
-- The `src` directory contains the source code for data collection, preprocessing, feature engineering, model training, inference, and monitoring.
-- The `tests` directory contains unit tests for the project.
-
-Refer to the [Project Structure Guide](docs/project-structure.md) for more details on each directory and file.
-
 ## Technologies Used
 This project combines several cutting-edge technologies to achieve its goals:
 
@@ -76,8 +55,6 @@ By working on this project, you will gain valuable skills and knowledge in sever
 
 By combining these technologies and skills, you will be well-equipped to tackle a wide range of data-driven projects across different domains. Whether you're interested in IoT, data analysis, machine learning, or real-time systems, this project provides a solid foundation for further exploration and growth.
 
-Feel free to explore the project repository and dive into the code to learn more about the implementation details. Happy learning and predicting!
-
 ---
 
 # Room Occupancy Prediction Using MQTT Sensor Data from Meraki
@@ -99,44 +76,25 @@ This repository contains the complete workflow and code for predicting room occu
 - [References](#references)
 
 ## Project Structure
-The project is structured as follows:
 
+The project structure is organized as follows:
 ```
 room-occupancy-prediction/
-│
 ├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── models/
-│
-├── src/
-│   ├── data_collection.py
-│   ├── data_preprocessing.py
-│   ├── feature_engineering.py
-│   ├── model_training.py
-│   ├── model_inference.py
-│   └── monitoring.py
-│
+├── docs/
 ├── notebooks/
-│   └── exploratory_analysis.ipynb
-│
+├── src/
 ├── tests/
-│   └── unit_tests.py
-│
-├── README.md
-├── PROJECT_SETUP.md
-├── requirements.txt
-└── Dockerfile
+└── ...
 ```
 
-- The `data` directory contains subdirectories for raw data, processed data, and trained models.
-- The `src` directory contains the Python scripts for different components of the project.
+- The `data` directory contains the raw and processed data.
+- The `docs` directory contains the project documentation and guides.
 - The `notebooks` directory contains Jupyter notebooks for exploratory data analysis and experimentation.
+- The `src` directory contains the source code for data collection, preprocessing, feature engineering, model training, inference, and monitoring.
 - The `tests` directory contains unit tests for the project.
-- The `README.md` file provides an overview of the project and instructions for usage.
-- The `PROJECT_SETUP.md` file contains instructions for setting up the project environment.
-- The `requirements.txt` file lists the project dependencies.
-- The `Dockerfile` defines the Docker image for the project.
+
+Refer to the [Project Structure Guide](docs/project-structure.md) for more details on each directory and file.
 
 ## Project Setup
 To set up the project, follow the instructions in the [PROJECT_SETUP.md](PROJECT_SETUP.md) file. It provides a step-by-step guide to configure the project using Docker, Conda, Python, and Git.
