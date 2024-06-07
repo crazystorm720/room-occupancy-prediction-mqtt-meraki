@@ -10,14 +10,17 @@ COPY environment.yml .
 RUN conda env create -f environment.yml
 
 # Activate the Conda environment
-RUN echo "conda activate room-occupancy-prediction" >> ~/.bashrc
-SHELL ["/bin/bash", "--login", "-c"]
+SHELL ["conda", "run", "-n", "room-occupancy-prediction", "/bin/bash", "-c"]
 
 # Copy the project files to the working directory
 COPY . .
+
+# Copy the startup script to the working directory
+COPY start.sh .
 
 # Expose the Jupyter notebook port
 EXPOSE 8888
 
 # Set the entry point command
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+CMD ["conda", "run", "-n", "room-occupancy-prediction", "./start.sh"]
+

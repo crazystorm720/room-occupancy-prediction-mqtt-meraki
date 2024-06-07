@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  room-occupancy-prediction:
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+    command: ["conda", "run", "-n", "room-occupancy-prediction", "./start.sh"]
+

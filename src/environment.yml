@@ -12,5 +12,3 @@ dependencies:
   - psycopg2
   - jupyter
   - pip
-  - pip:
-    - timescale-postgres
