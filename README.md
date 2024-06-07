@@ -4,6 +4,7 @@ This repository contains the complete workflow and code for predicting room occu
 
 ## Table of Contents
 - [Introduction](#introduction)
+- [Project Setup](#project-setup)
 - [Data Collection](#data-collection)
 - [Data Preprocessing](#data-preprocessing)
 - [Feature Engineering](#feature-engineering)
@@ -17,14 +18,19 @@ This repository contains the complete workflow and code for predicting room occu
 ## Introduction
 This project aims to predict the number of people in a room using sensor data from Meraki devices. We use MQTT for real-time data ingestion and focus on chassis fan speed and environmental sensors (temperature, humidity) to build a predictive model.
 
+## Project Setup
+To set up the project, follow the instructions in the [PROJECT_SETUP.md](PROJECT_SETUP.md) file. It provides a step-by-step guide to configure the project using Docker, Conda, Python, and Git.
+
 ## Data Collection
 ### Real-time Data Ingestion
 - **Tools:** MQTT broker, Meraki sensors.
 - **Process:** Collecting real-time data on fan speed, temperature, and humidity.
+- **Implementation:** The `data_collection.py` file contains functions to connect to the MQTT broker, process MQTT messages, and store the collected data in a database.
 
 ### Batch Data Collection
 - **Tools:** TimescaleDB.
 - **Process:** Aggregating data over specified periods for batch inference.
+- **Implementation:** The `data_collection.py` file includes functions to retrieve data from the database for a specified date range.
 
 ## Data Preprocessing
 ### Steps
@@ -32,12 +38,14 @@ This project aims to predict the number of people in a room using sensor data fr
 - Removing outliers.
 - Feature engineering (lag features, rolling statistics, time-based features).
 - Normalization and scaling.
+- **Implementation:** The `data_preprocessing.py` file contains functions to load data, handle missing values, remove outliers, and perform feature scaling.
 
 ## Feature Engineering
 - **Lag Features:** Capture temporal dependencies.
 - **Rolling Statistics:** Calculate moving averages and other rolling metrics.
 - **Time-Based Features:** Extract features like hour of the day and day of the week.
 - **Interaction Terms:** Combine features to capture interactions.
+- **Implementation:** The `feature_engineering.py` file includes functions to create lag features, rolling statistics, time-based features, and interaction terms.
 
 ## Model Training
 ### Training Process
@@ -45,6 +53,7 @@ This project aims to predict the number of people in a room using sensor data fr
 - **Validation Set:** Used to tune hyperparameters and avoid overfitting.
 - **Test Set:** Used to evaluate the final model's performance.
 - **Tools:** scikit-learn, hyperparameter tuning libraries.
+- **Implementation:** The `model_training.py` file contains functions to split the data, train the machine learning model, and evaluate its performance.
 
 ### Metrics for Evaluation
 - Regression: Mean Squared Error (MSE), Root Mean Squared Error (RMSE), R-squared.
@@ -53,13 +62,16 @@ This project aims to predict the number of people in a room using sensor data fr
 ### Real-time Inference
 - Collect real-time data via MQTT.
 - Preprocess data and apply the trained model to make predictions.
+- **Implementation:** The `model_inference.py` file includes functions to load the trained model, preprocess input data, and make predictions in real-time.
 
 ### Batch Inference
 - Aggregate data over a period, preprocess, and predict.
+- **Implementation:** The `model_inference.py` file also contains functions to perform batch inference on aggregated data.
 
 ## Monitoring and Logging
 - **Log Predictions:** Store predictions for future analysis and auditing.
 - **Monitor Performance:** Track model performance over time to detect drift and degradation.
+- **Implementation:** The `monitoring.py` file includes functions to log predictions, calculate performance metrics, and detect anomalies.
 
 ## Advanced Techniques
 - **Feature Selection:** Identify the most important features to reduce dimensionality.
