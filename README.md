@@ -4,6 +4,7 @@ This repository contains the complete workflow and code for predicting room occu
 
 ## Table of Contents
 - [Introduction](#introduction)
+- [Project Structure](#project-structure)
 - [Project Setup](#project-setup)
 - [Data Collection](#data-collection)
 - [Data Preprocessing](#data-preprocessing)
@@ -17,6 +18,46 @@ This repository contains the complete workflow and code for predicting room occu
 
 ## Introduction
 This project aims to predict the number of people in a room using sensor data from Meraki devices. We use MQTT for real-time data ingestion and focus on chassis fan speed and environmental sensors (temperature, humidity) to build a predictive model.
+
+## Project Structure
+The project is structured as follows:
+
+```
+room-occupancy-prediction/
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── models/
+│
+├── src/
+│   ├── data_collection.py
+│   ├── data_preprocessing.py
+│   ├── feature_engineering.py
+│   ├── model_training.py
+│   ├── model_inference.py
+│   └── monitoring.py
+│
+├── notebooks/
+│   └── exploratory_analysis.ipynb
+│
+├── tests/
+│   └── unit_tests.py
+│
+├── README.md
+├── PROJECT_SETUP.md
+├── requirements.txt
+└── Dockerfile
+```
+
+- The `data` directory contains subdirectories for raw data, processed data, and trained models.
+- The `src` directory contains the Python scripts for different components of the project.
+- The `notebooks` directory contains Jupyter notebooks for exploratory data analysis and experimentation.
+- The `tests` directory contains unit tests for the project.
+- The `README.md` file provides an overview of the project and instructions for usage.
+- The `PROJECT_SETUP.md` file contains instructions for setting up the project environment.
+- The `requirements.txt` file lists the project dependencies.
+- The `Dockerfile` defines the Docker image for the project.
 
 ## Project Setup
 To set up the project, follow the instructions in the [PROJECT_SETUP.md](PROJECT_SETUP.md) file. It provides a step-by-step guide to configure the project using Docker, Conda, Python, and Git.
