@@ -318,5 +318,80 @@ By following this installation guide, you should have the Room Occupancy Predict
 
 If you have any further questions or need additional assistance, please refer to the project's documentation or contact the project maintainers.
 
+---
+## Build you Conda Jupyter environment.yml
 
+```yaml
+name: room-occupancy-prediction
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - paho-mqtt
+  - psycopg2
+  - jupyter
+  - pip
+  - pip:
+    - timescale-postgres
+```
 
+In this `environment.yml` file, we specify the name of the environment as `room-occupancy-prediction` and list the required dependencies. We include the necessary packages such as `numpy`, `pandas`, `scikit-learn`, `matplotlib`, `seaborn`, `paho-mqtt`, and `psycopg2`. We also include `jupyter` for running Jupyter notebooks and `pip` for installing additional packages.
+
+Note that we use the `conda-forge` channel to ensure compatibility and access to a wide range of packages.
+
+Now, let's update the `Dockerfile` to align with the `environment.yml` file:
+
+```Dockerfile
+FROM continuumio/miniconda3
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the environment.yml file to the working directory
+COPY environment.yml .
+
+# Create the Conda environment
+RUN conda env create -f environment.yml
+
+# Activate the Conda environment
+RUN echo "conda activate room-occupancy-prediction" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+
+# Copy the project files to the working directory
+COPY . .
+
+# Expose the Jupyter notebook port
+EXPOSE 8888
+
+# Set the entry point command
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+```
+
+In this `Dockerfile`, we use the `continuumio/miniconda3` base image, which provides Miniconda3 (a lightweight version of Anaconda) as the foundation for our project environment.
+
+We set the working directory to `/app` and copy the `environment.yml` file to this directory. Then, we use the `RUN` command to create the Conda environment based on the `environment.yml` file.
+
+To activate the Conda environment, we add the `conda activate` command to the `~/.bashrc` file and set the shell to use bash with login.
+
+We copy the project files to the working directory and expose port 8888 for accessing Jupyter notebooks.
+
+Finally, we set the entry point command to run Jupyter notebook, specifying the IP address, port, and other necessary options.
+
+With these updates, your `environment.yml` and `Dockerfile` should be aligned and work together seamlessly. You can now build the Docker image using the following command:
+
+```bash
+docker build -t room-occupancy-prediction .
+```
+
+And run the Docker container with:
+
+```bash
+docker run -p 8888:8888 room-occupancy-prediction
+```
+
+This command will start the Jupyter notebook server inside the container, and you can access it by opening a web browser and navigating to `http://localhost:8888`.
