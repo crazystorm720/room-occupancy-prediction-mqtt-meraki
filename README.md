@@ -1,7 +1,50 @@
-# Room Occupancy Prediction: An Overview
+# Room Occupancy Prediction
 
-## Introduction
-Welcome to the Room Occupancy Prediction project! This project aims to predict the number of people in a room using sensor data from Meraki devices. By leveraging real-time data and machine learning techniques, we can create a system that provides valuable insights into room occupancy patterns.
+Welcome to the Room Occupancy Prediction project! This project aims to predict the number of people in a room using sensor data collected from Meraki devices via MQTT. By leveraging real-time data and machine learning techniques, we can create a system that provides valuable insights into room occupancy patterns.
+
+## Project Overview
+
+The Room Occupancy Prediction project encompasses the following key components:
+1. **Data Collection**: Collect real-time sensor data from Meraki devices using MQTT and store it in a database for further analysis.
+2. **Data Preprocessing**: Clean and preprocess the collected data, handle missing values, remove outliers, and perform feature scaling.
+3. **Feature Engineering**: Create new features based on the raw data to capture temporal dependencies, calculate rolling statistics, extract time-based features, and create interaction terms.
+4. **Model Training**: Train machine learning models using the preprocessed data and evaluate their performance using appropriate metrics.
+5. **Model Inference**: Apply the trained models to make real-time predictions on new sensor data and perform batch inference on historical data.
+6. **Monitoring and Logging**: Monitor the model's performance over time, log predictions for auditing and analysis, and detect anomalies or drift.
+
+## Getting Started
+
+To get started with the Room Occupancy Prediction project, follow these steps:
+
+1. **Prerequisites**: Ensure that you have Docker, Conda, Python, and Git installed on your system.
+2. **Installation**: Clone the project repository and set up the project environment using Docker and Conda. Refer to the [Installation Guide](docs/installation.md) for detailed instructions.
+3. **Data Collection**: Set up the data collection pipeline to ingest real-time sensor data from Meraki devices using MQTT. Refer to the [Data Collection Guide](docs/data-collection.md) for more information.
+4. **Data Preprocessing**: Preprocess the collected data using the provided scripts and guidelines. Refer to the [Data Preprocessing Guide](docs/data-preprocessing.md) for details.
+5. **Feature Engineering**: Generate new features from the preprocessed data using the feature engineering techniques outlined in the [Feature Engineering Guide](docs/feature-engineering.md).
+6. **Model Training**: Train machine learning models using the preprocessed data and evaluate their performance. Refer to the [Model Training Guide](docs/model-training.md) for instructions.
+7. **Model Inference**: Apply the trained models to make real-time predictions and perform batch inference. Refer to the [Model Inference Guide](docs/model-inference.md) for more information.
+8. **Monitoring and Logging**: Set up monitoring and logging mechanisms to track the model's performance and detect anomalies. Refer to the [Monitoring and Logging Guide](docs/monitoring-logging.md) for details.
+
+## Project Structure
+
+The project structure is organized as follows:
+```
+room-occupancy-prediction/
+├── data/
+├── docs/
+├── notebooks/
+├── src/
+├── tests/
+└── ...
+```
+
+- The `data` directory contains the raw and processed data.
+- The `docs` directory contains the project documentation and guides.
+- The `notebooks` directory contains Jupyter notebooks for exploratory data analysis and experimentation.
+- The `src` directory contains the source code for data collection, preprocessing, feature engineering, model training, inference, and monitoring.
+- The `tests` directory contains unit tests for the project.
+
+Refer to the [Project Structure Guide](docs/project-structure.md) for more details on each directory and file.
 
 ## Technologies Used
 This project combines several cutting-edge technologies to achieve its goals:
