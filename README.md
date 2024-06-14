@@ -491,17 +491,25 @@ Gradient Boosting is a machine learning technique used for regression and classi
 ## Gradient Boosting Algorithm
 
 1. Initialize model with a constant value:
-   \( F_0(x) = \arg\min_{\gamma} \sum_{i=1}^n L(y_i, \gamma) \)
+   ```
+   F_0(x) = \arg\min_{\gamma} \sum_{i=1}^n L(y_i, \gamma)
+   ```
 
 2. For \( m = 1 \) to \( M \) (number of trees):
    1. Compute the negative gradient (pseudo-residuals):
-      \( r_{im} = -\left[ \frac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right]_{F(x)=F_{m-1}(x)} \)
+      ```
+      r_{im} = -\left[ \frac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right]_{F(x)=F_{m-1}(x)}
+      ```
    2. Fit a weak learner \( h_m(x) \) to the pseudo-residuals.
-   3. Compute the step size \( \gamma_m \):
-      \( \gamma_m = \arg\min_{\gamma} \sum_{i=1}^n L(y_i, F_{m-1}(x_i) + \gamma h_m(x_i)) \)
+   3. Compute the step size:
+      ```
+      \gamma_m = \arg\min_{\gamma} \sum_{i=1}^n L(y_i, F_{m-1}(x_i) + \gamma h_m(x_i))
+      ```
    4. Update the model:
-      \( F_m(x) = F_{m-1}(x) + \gamma_m h_m(x) \)
-
+      ```
+      F_m(x) = F_{m-1}(x) + \gamma_m h_m(x)
+      ```
+      
 ## Advantages of Gradient Boosting
 
 - **High Accuracy**: Gradient Boosting often achieves high predictive accuracy.
