@@ -173,3 +173,170 @@ Predicting room occupancy using chassis fan speed, temperature, and humidity.
 - [MQTT Protocol](https://mqtt.org/)
 - [TimescaleDB Documentation](https://docs.timescale.com/latest/main)
 - [Meraki Sensors](https://meraki.cisco.com/products/sensors)
+
+---
+
+# Machine Learning Model Training Workflow for Meraki MQTT Sensor Data Using Gradient Boosting
+
+## 1. Data Collection and Preprocessing
+
+### Collect Data
+```python
+import pandas as pd
+
+# Assuming data is stored in CSV files
+train_data = pd.read_csv('train_data.csv')
+test_data = pd.read_csv('test_data.csv')
+```
+
+### Data Cleaning
+```python
+# Handle missing values
+train_data.fillna(method='ffill', inplace=True)
+test_data.fillna(method='ffill', inplace=True)
+
+# Convert timestamps to datetime format
+train_data['timestamp'] = pd.to_datetime(train_data['timestamp'])
+test_data['timestamp'] = pd.to_datetime(test_data['timestamp'])
+
+# Normalize sensor values (if necessary)
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+train_data[['temperature', 'humidity']] = scaler.fit_transform(train_data[['temperature', 'humidity']])
+test_data[['temperature', 'humidity']] = scaler.transform(test_data[['temperature', 'humidity']])
+```
+
+### Data Exploration
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Explore data patterns
+sns.lineplot(data=train_data, x='timestamp', y='temperature')
+plt.show()
+```
+
+## 2. Problem Definition and Feature Engineering
+
+### Define Problem
+- **Example Problem**: Predicting room occupancy based on sensor data.
+
+### Feature Engineering
+```python
+# Create time-based features
+train_data['hour'] = train_data['timestamp'].dt.hour
+train_data['day_of_week'] = train_data['timestamp'].dt.dayofweek
+train_data['is_weekend'] = train_data['day_of_week'] >= 5
+
+test_data['hour'] = test_data['timestamp'].dt.hour
+test_data['day_of_week'] = test_data['timestamp'].dt.dayofweek
+test_data['is_weekend'] = test_data['day_of_week'] >= 5
+
+# Aggregate sensor readings
+train_data['temp_humidity_index'] = train_data['temperature'] * 0.55 + train_data['humidity'] * 0.45
+test_data['temp_humidity_index'] = test_data['temperature'] * 0.55 + test_data['humidity'] * 0.45
+```
+
+## 3. Data Splitting and Model Selection
+
+### Data Splitting
+```python
+from sklearn.model_selection import train_test_split
+
+# Define features and target
+features = ['temperature', 'humidity', 'hour', 'day_of_week', 'is_weekend', 'temp_humidity_index']
+target = 'occupancy'  # Example target variable
+
+X = train_data[features]
+y = train_data[target]
+
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+```
+
+### Model Selection
+- **Model**: Gradient Boosting Classifier
+
+## 4. Model Training and Evaluation
+
+### Train Models
+```python
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import GridSearchCV
+
+# Initialize model
+model = GradientBoostingClassifier()
+
+# Hyperparameter tuning
+param_grid = {
+    'n_estimators': [100, 200],
+    'learning_rate': [0.01, 0.1, 0.2],
+    'max_depth': [3, 4, 5]
+}
+
+grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy')
+grid_search.fit(X_train, y_train)
+
+# Best model
+best_model = grid_search.best_estimator_
+print(f'Best Hyperparameters: {grid_search.best_params_}')
+```
+
+### Evaluate Models
+```python
+from sklearn.metrics import accuracy_score, f1_score
+
+# Predictions on validation set
+y_val_pred = best_model.predict(X_val)
+
+# Evaluation metrics
+accuracy = accuracy_score(y_val, y_val_pred)
+f1 = f1_score(y_val, y_val_pred)
+
+print(f'Validation Accuracy: {accuracy:.2f}')
+print(f'Validation F1 Score: {f1:.2f}')
+```
+
+## 5. Model Testing and Deployment
+
+### Test Model
+```python
+# Predictions on test set
+X_test = test_data[features]
+y_test_pred = best_model.predict(X_test)
+
+# Prepare submission (if applicable)
+submission = pd.DataFrame({'timestamp': test_data['timestamp'], 'occupancy': y_test_pred})
+submission.to_csv('submission.csv', index=False)
+```
+
+## 6. Monitoring and Continuous Improvement
+
+### Monitor Performance
+```python
+# Assuming real-time data comes in
+# new_data = ...  # Collect new real-time data
+
+# Process new data similarly
+# new_data['timestamp'] = pd.to_datetime(new_data['timestamp'])
+# new_data[['temperature', 'humidity']] = scaler.transform(new_data[['temperature', 'humidity']])
+# new_data['hour'] = new_data['timestamp'].dt.hour
+# new_data['day_of_week'] = new_data['timestamp'].dt.dayofweek
+# new_data['is_weekend'] = new_data['day_of_week'] >= 5
+# new_data['temp_humidity_index'] = new_data['temperature'] * 0.55 + new_data['humidity'] * 0.45
+
+# Predictions on new data
+# new_predictions = best_model.predict(new_data[features])
+```
+
+### Continuous Improvement
+```python
+# Periodically retrain the model with new data
+# updated_train_data = pd.concat([train_data, new_data])
+# X_updated = updated_train_data[features]
+# y_updated = updated_train_data[target]
+
+# best_model.fit(X_updated, y_updated)
+```
+
+By following this detailed and code-focused workflow, you can effectively train, evaluate, and deploy gradient boosting models tailored for Meraki MQTT sensor data. This structured approach ensures that each step is well-defined and thoroughly documented, providing a clear path from data collection to model deployment and continuous improvement.
