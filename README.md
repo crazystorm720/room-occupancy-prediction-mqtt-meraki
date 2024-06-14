@@ -495,7 +495,7 @@ Gradient Boosting is a machine learning technique used for regression and classi
 
 2. For \( m = 1 \) to \( M \) (number of trees):
    1. Compute the negative gradient (pseudo-residuals):
-      \( r_{im} = -\left[\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\right]_{F(x)=F_{m-1}(x)} \)
+      \( r_{im} = -\left[ \frac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right]_{F(x)=F_{m-1}(x)} \)
    2. Fit a weak learner \( h_m(x) \) to the pseudo-residuals.
    3. Compute the step size \( \gamma_m \):
       \( \gamma_m = \arg\min_{\gamma} \sum_{i=1}^n L(y_i, F_{m-1}(x_i) + \gamma h_m(x_i)) \)
