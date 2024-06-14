@@ -445,3 +445,104 @@ By following this detailed and code-focused workflow, you can effectively train,
 7. **Monitor and Log**: Continuously monitor the model's performance, log predictions, and detect any anomalies.
 
 By following this detailed and logical workflow, you can ensure that each component of the Room Occupancy Prediction project is accounted for and integrated seamlessly. This modular approach allows for easy maintenance, scalability, and potential enhancements in the future.
+
+---
+
+# Gradient Boosting Overview
+
+## Introduction
+Gradient Boosting is a machine learning technique used for regression and classification problems, which builds a model in a stage-wise fashion from an ensemble of weak learners (usually decision trees).
+
+## Key Concepts
+
+### Weak Learners
+- **Weak Learners** are models that perform slightly better than random guessing.
+- In Gradient Boosting, decision trees with limited depth (often called stumps) are used as weak learners.
+
+### Boosting
+- **Boosting** is an ensemble technique that combines multiple weak learners to form a strong learner.
+- The key idea is to add new models to correct the errors made by the previous models.
+
+## How Gradient Boosting Works
+
+1. **Initialize the model** with a constant value (usually the mean of the target values for regression).
+2. **Fit a weak learner** to the residuals (errors) of the current model.
+3. **Update the model** by adding the new weak learner to the ensemble.
+4. **Repeat** steps 2 and 3 for a specified number of iterations or until a stopping criterion is met.
+
+## Components of Gradient Boosting
+
+### Loss Function
+- The loss function measures the difference between the predicted and actual values.
+- Gradient Boosting aims to minimize the loss function.
+
+### Learning Rate
+- The learning rate (shrinkage) controls the contribution of each weak learner.
+- Lower learning rates require more trees but can lead to better performance.
+
+### Number of Trees
+- The number of trees (iterations) determines the number of weak learners in the ensemble.
+- More trees can improve accuracy but also increase the risk of overfitting.
+
+### Tree Depth
+- The depth of the trees controls the complexity of the weak learners.
+- Shallow trees (stumps) are often used to avoid overfitting.
+
+## Gradient Boosting Algorithm
+
+1. Initialize model with a constant value:
+   \( F_0(x) = \arg\min_{\gamma} \sum_{i=1}^n L(y_i, \gamma) \)
+
+2. For \( m = 1 \) to \( M \) (number of trees):
+   1. Compute the negative gradient (pseudo-residuals):
+      \( r_{im} = -\left[\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\right]_{F(x)=F_{m-1}(x)} \)
+   2. Fit a weak learner \( h_m(x) \) to the pseudo-residuals.
+   3. Compute the step size \( \gamma_m \):
+      \( \gamma_m = \arg\min_{\gamma} \sum_{i=1}^n L(y_i, F_{m-1}(x_i) + \gamma h_m(x_i)) \)
+   4. Update the model:
+      \( F_m(x) = F_{m-1}(x) + \gamma_m h_m(x) \)
+
+## Advantages of Gradient Boosting
+
+- **High Accuracy**: Gradient Boosting often achieves high predictive accuracy.
+- **Flexibility**: It can be used with various loss functions and is adaptable to both regression and classification tasks.
+- **Feature Importance**: Provides insights into the importance of features.
+
+## Disadvantages of Gradient Boosting
+
+- **Computationally Intensive**: Training can be time-consuming, especially with a large number of trees.
+- **Prone to Overfitting**: Careful tuning of hyperparameters is necessary to avoid overfitting.
+- **Parameter Sensitivity**: Requires careful tuning of parameters like learning rate, number of trees, and tree depth.
+
+## Popular Gradient Boosting Libraries
+
+- **XGBoost**: Known for its speed and performance.
+- **LightGBM**: Optimized for efficiency and scalability.
+- **CatBoost**: Handles categorical features automatically and reduces the need for extensive preprocessing.
+- **Scikit-learn**: Provides a simple implementation for basic use cases.
+
+## Example in Python using Scikit-learn
+
+```python
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error
+
+# Sample data
+X_train, X_test, y_train, y_test = ...
+
+# Initialize the model
+model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3)
+
+# Fit the model
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluate
+mse = mean_squared_error(y_test, y_pred)
+print(f'Mean Squared Error: {mse}')
+```
+
+## Conclusion
+Gradient Boosting is a powerful and flexible machine learning technique suitable for various tasks. By understanding its key concepts, components, and algorithm, one can effectively apply it to solve complex problems.
