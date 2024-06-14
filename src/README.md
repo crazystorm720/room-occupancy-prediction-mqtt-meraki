@@ -38,8 +38,8 @@ The module uses the `pandas` library for data manipulation and feature engineeri
 
 The `model_training.py` module handles the training and evaluation of the machine learning model. It performs the following tasks:
 
-- Splits the data into training and testing sets using the `split_data()` function.
-- Trains the machine learning model (e.g., Linear Regression) using the `train_model()` function.
+- Splits the data into training, validation, and test sets using the `split_data()` function.
+- Trains the machine learning model (e.g., Gradient Boosting Classifier) using the `train_model()` function.
 - Evaluates the trained model using metrics such as mean squared error (MSE) and R-squared (R2) score using the `evaluate_model()` function.
 
 The module utilizes the `scikit-learn` library for model training and evaluation.
@@ -52,7 +52,7 @@ The `model_inference.py` module is responsible for loading the trained model and
 - Preprocesses the input data using the same steps as in the training phase using the `preprocess_input_data()` function.
 - Makes predictions using the loaded model and preprocessed data using the `predict()` function.
 
-The module uses the `pickle` library for model serialization and deserialization.
+The module uses the `joblib` library for model serialization and deserialization.
 
 ## 6. Monitoring and Logging (`src/monitoring.py`)
 
@@ -81,230 +81,309 @@ The script is executed by calling the `main()` function when run directly.
 
 ---
 
-1. **Data Collection (`src/data_collection.py`):**
-   - Import the necessary libraries:
-     ```python
-     import paho.mqtt.client as mqtt
-     import psycopg2
-     ```
-   - Implement functions to connect to the MQTT broker and subscribe to the specified topic:
-     ```python
-     def connect_mqtt(broker_url, port, topic):
-         client = mqtt.Client()
-         client.on_connect = on_connect
-         client.on_message = on_message
-         client.connect(broker_url, port)
-         client.subscribe(topic)
-         client.loop_forever()
-     ```
-   - Implement callback functions for MQTT events:
-     ```python
-     def on_connect(client, userdata, flags, rc):
-         print(f"Connected to MQTT broker with result code {rc}")
+## Detailed Code Snippets
 
-     def on_message(client, userdata, message):
-         data = process_mqtt_message(message)
-         store_data(data)
-     ```
-   - Implement functions to process MQTT messages and store data in the database:
-     ```python
-     def process_mqtt_message(message):
-         # Extract relevant data from the MQTT message
-         # Return the processed data
+### 1. Data Collection (`src/data_collection.py`)
 
-     def store_data(data):
-         # Store the data in the database
-         # Use psycopg2 library to interact with the database
-     ```
-   - Document the usage and functionality of each function using docstrings.
+#### Import the necessary libraries:
 
-2. **Data Preprocessing (`src/data_preprocessing.py`):**
-   - Import the necessary libraries:
-     ```python
-     import pandas as pd
-     import numpy as np
-     from sklearn.preprocessing import StandardScaler
-     ```
-   - Implement functions to load data from the database:
-     ```python
-     def load_data(start_date, end_date):
-         # Load data from the database for the specified date range
-         # Return the loaded data as a pandas DataFrame
-     ```
-   - Implement functions to handle missing values and remove outliers:
-     ```python
-     def handle_missing_values(data):
-         # Handle missing values in the data using appropriate techniques
-         # Return the processed data
+```python
+import paho.mqtt.client as mqtt
+import psycopg2
+import json
+```
 
-     def remove_outliers(data):
-         # Remove outliers from the data using statistical methods
-         # Return the processed data
-     ```
-   - Implement functions to perform feature scaling:
-     ```python
-     def scale_features(data):
-         scaler = StandardScaler()
-         scaled_data = scaler.fit_transform(data)
-         return scaled_data
-     ```
-   - Document the usage and functionality of each function using docstrings.
+#### Connect to the MQTT broker and subscribe to the specified topic:
 
-3. **Feature Engineering (`src/feature_engineering.py`):**
-   - Import the necessary libraries:
-     ```python
-     import pandas as pd
-     ```
-   - Implement functions to create lag features:
-     ```python
-     def create_lag_features(data, lag_periods):
-         # Create lag features by shifting the data by specified periods
-         # Return the data with lag features
-     ```
-   - Implement functions to create rolling statistics features:
-     ```python
-     def create_rolling_features(data, window_size):
-         # Create rolling statistics features using a specified window size
-         # Return the data with rolling features
-     ```
-   - Implement functions to create time-based features:
-     ```python
-     def create_time_features(data):
-         # Create time-based features, such as hour of the day and day of the week
-         # Return the data with time-based features
-     ```
-   - Document the usage and functionality of each function using docstrings.
+```python
+def connect_mqtt(broker_url, port, topic):
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect(broker_url, port)
+    client.subscribe(topic)
+    client.loop_forever()
+```
 
-4. **Model Training (`src/model_training.py`):**
-   - Import the necessary libraries:
-     ```python
-     from sklearn.model_selection import train_test_split
-     from sklearn.linear_model import LinearRegression
-     from sklearn.metrics import mean_squared_error, r2_score
-     ```
-   - Implement functions to split the data into training and testing sets:
-     ```python
-     def split_data(data, target_variable, test_size):
-         X = data.drop(target_variable, axis=1)
-         y = data[target_variable]
-         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
-         return X_train, X_test, y_train, y_test
-     ```
-   - Implement functions to train the machine learning model:
-     ```python
-     def train_model(X_train, y_train):
-         model = LinearRegression()
-         model.fit(X_train, y_train)
-         return model
-     ```
-   - Implement functions to evaluate the trained model:
-     ```python
-     def evaluate_model(model, X_test, y_test):
-         y_pred = model.predict(X_test)
-         mse = mean_squared_error(y_test, y_pred)
-         r2 = r2_score(y_test, y_pred)
-         return mse, r2
-     ```
-   - Document the usage and functionality of each function using docstrings.
+#### Callback functions for MQTT events:
 
-5. **Model Inference (`src/model_inference.py`):**
-   - Import the necessary libraries:
-     ```python
-     import pickle
-     ```
-   - Implement functions to load the trained model:
-     ```python
-     def load_model(model_path):
-         with open(model_path, 'rb') as file:
-             model = pickle.load(file)
-         return model
-     ```
-   - Implement functions to preprocess input data for inference:
-     ```python
-     def preprocess_input_data(data):
-         # Preprocess the input data using the same steps as in training
-         # Return the preprocessed data
-     ```
-   - Implement functions to make predictions using the loaded model:
-     ```python
-     def predict(model, input_data):
-         preprocessed_data = preprocess_input_data(input_data)
-         predictions = model.predict(preprocessed_data)
-         return predictions
-     ```
-   - Document the usage and functionality of each function using docstrings.
+```python
+def on_connect(client, userdata, flags, rc):
+    print(f"Connected to MQTT broker with result code {rc}")
 
-6. **Monitoring and Logging (`src/monitoring.py`):**
-   - Import the necessary libraries:
-     ```python
-     import logging
-     from datetime import datetime
-     ```
-   - Implement functions to log predictions:
-     ```python
-     def log_prediction(prediction, timestamp):
-         logging.info(f"Prediction: {prediction}, Timestamp: {timestamp}")
-     ```
-   - Implement functions to calculate performance metrics:
-     ```python
-     def calculate_performance_metrics(predictions, actual_values):
-         # Calculate performance metrics, such as accuracy and F1 score
-         # Log the calculated metrics
-     ```
-   - Implement functions to detect anomalies:
-     ```python
-     def detect_anomalies(predictions, threshold):
-         # Detect anomalies in the predictions based on a specified threshold
-         # Log any detected anomalies
-     ```
-   - Document the usage and functionality of each function using docstrings.
+def on_message(client, userdata, message):
+    data = process_mqtt_message(message)
+    store_data(data)
+```
 
-7. **Main Script (`src/main.py`):**
-   - Import the necessary functions from the other modules:
-     ```python
-     from data_collection import connect_mqtt
-     from data_preprocessing import load_data, handle_missing_values, remove_outliers, scale_features
-     from feature_engineering import create_lag_features, create_rolling_features, create_time_features
-     from model_training import split_data, train_model, evaluate_model
-     from model_inference import load_model, predict
-     from monitoring import log_prediction, calculate_performance_metrics, detect_anomalies
-     ```
-   - Implement the main function to orchestrate the flow of data through the pipeline:
-     ```python
-     def main():
-         # Data Collection
-         connect_mqtt(broker_url, port, topic)
+#### Process MQTT messages and store data in the database:
 
-         # Data Preprocessing
-         data = load_data(start_date, end_date)
-         data = handle_missing_values(data)
-         data = remove_outliers(data)
-         data = scale_features(data)
+```python
+def process_mqtt_message(message):
+    # Extract relevant data from the MQTT message
+    data = json.loads(message.payload)
+    return data
 
-         # Feature Engineering
-         data = create_lag_features(data, lag_periods)
-         data = create_rolling_features(data, window_size)
-         data = create_time_features(data)
+def store_data(data):
+    # Store the data in the database
+    conn = psycopg2.connect(host="localhost", database="room_occupancy", user="postgres", password="mysecretpassword")
+    cur = conn.cursor()
+    cur.execute("INSERT INTO sensor_data (time, temperature, humidity, chassis_fan_speed) VALUES (%s, %s, %s, %s)",
+                (data['timestamp'], data['temperature'], data['humidity'], data['chassis_fan_speed']))
+    conn.commit()
+    cur.close()
+    conn.close()
+```
 
-         # Model Training
-         X_train, X_test, y_train, y_test = split_data(data, target_variable, test_size)
-         model = train_model(X_train, y_train)
-         mse, r2 = evaluate_model(model, X_test, y_test)
+### 2. Data Preprocessing (`src/data_preprocessing.py`)
 
-         # Model Inference
-         model = load_model(model_path)
-         predictions = predict(model, input_data)
+#### Import the necessary libraries:
 
-         # Monitoring and Logging
-         timestamp = datetime.now()
-         log_prediction(predictions, timestamp)
-         calculate_performance_metrics(predictions, actual_values)
-         detect_anomalies(predictions, threshold)
-     ```
-   - Call the main function when the script is executed:
-     ```python
-     if __name__ == "__main__":
-         main()
-     ```
+```python
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+```
 
-This guide provides an overview of the initial items and relevant codebase for each module in the `src` directory. It includes sample code snippets and explanations for each component.
+#### Load data from the database:
+
+```python
+def load_data(start_date, end_date):
+    conn = psycopg2.connect(host="localhost", database="room_occupancy", user="postgres", password="mysecretpassword")
+    query = f"SELECT * FROM sensor_data WHERE time BETWEEN '{start_date}' AND '{end_date}'"
+    data = pd.read_sql(query, conn)
+    conn.close()
+    return data
+```
+
+#### Handle missing values and remove outliers:
+
+```python
+def handle_missing_values(data):
+    # Handle missing values
+    data.fillna(method='ffill', inplace=True)
+    return data
+
+def remove_outliers(data):
+    # Remove outliers using IQR method
+    Q1 = data.quantile(0.25)
+    Q3 = data.quantile(0.75)
+    IQR = Q3 - Q1
+    data = data[~((data < (Q1 - 1.5 * IQR)) | (data > (Q3 + 1.5 * IQR))).any(axis=1)]
+    return data
+```
+
+#### Perform feature scaling:
+
+```python
+def scale_features(data):
+    scaler = StandardScaler()
+    data[['temperature', 'humidity', 'chassis_fan_speed']] = scaler.fit_transform(data[['temperature', 'humidity', 'chassis_fan_speed']])
+    return data
+```
+
+### 3. Feature Engineering (`src/feature_engineering.py`)
+
+#### Import the necessary libraries:
+
+```python
+import pandas as pd
+```
+
+#### Create lag features:
+
+```python
+def create_lag_features(data, lag_periods):
+    for period in lag_periods:
+        data[f'temp_lag_{period}'] = data['temperature'].shift(period)
+        data[f'humidity_lag_{period}'] = data['humidity'].shift(period)
+    data.fillna(method='bfill', inplace=True)
+    return data
+```
+
+#### Create rolling statistics features:
+
+```python
+def create_rolling_features(data, window_size):
+    data['temp_rolling_mean'] = data['temperature'].rolling(window=window_size).mean()
+    data['humidity_rolling_mean'] = data['humidity'].rolling(window=window_size).mean()
+    data.fillna(method='bfill', inplace=True)
+    return data
+```
+
+#### Create time-based features:
+
+```python
+def create_time_features(data):
+    data['hour'] = data['time'].dt.hour
+    data['day_of_week'] = data['time'].dt.dayofweek
+    data['is_weekend'] = data['day_of_week'] >= 5
+    return data
+```
+
+### 4. Model Training (`src/model_training.py`)
+
+#### Import the necessary libraries:
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import mean_squared_error, r2_score
+```
+
+#### Split the data into training, validation, and test sets:
+
+```python
+def split_data(data, target_variable, test_size=0.2):
+    X = data.drop(columns=[target_variable])
+   
+
+ y = data[target_variable]
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=test_size, random_state=42)
+    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+    return X_train, X_val, X_test, y_train, y_val, y_test
+```
+
+#### Train the machine learning model:
+
+```python
+def train_model(X_train, y_train):
+    model = GradientBoostingClassifier()
+    model.fit(X_train, y_train)
+    return model
+```
+
+#### Evaluate the trained model:
+
+```python
+def evaluate_model(model, X_val, y_val):
+    y_pred = model.predict(X_val)
+    mse = mean_squared_error(y_val, y_pred)
+    r2 = r2_score(y_val, y_pred)
+    return mse, r2
+```
+
+### 5. Model Inference (`src/model_inference.py`)
+
+#### Import the necessary libraries:
+
+```python
+import joblib
+```
+
+#### Load the trained model:
+
+```python
+def load_model(model_path):
+    model = joblib.load(model_path)
+    return model
+```
+
+#### Preprocess input data for inference:
+
+```python
+def preprocess_input_data(data, scaler):
+    data[['temperature', 'humidity', 'chassis_fan_speed']] = scaler.transform(data[['temperature', 'humidity', 'chassis_fan_speed']])
+    return data
+```
+
+#### Make predictions using the loaded model:
+
+```python
+def predict(model, input_data):
+    preprocessed_data = preprocess_input_data(input_data)
+    predictions = model.predict(preprocessed_data)
+    return predictions
+```
+
+### 6. Monitoring and Logging (`src/monitoring.py`)
+
+#### Import the necessary libraries:
+
+```python
+import logging
+from datetime import datetime
+```
+
+#### Log predictions:
+
+```python
+def log_prediction(prediction, timestamp):
+    logging.info(f"Prediction: {prediction}, Timestamp: {timestamp}")
+```
+
+#### Calculate performance metrics:
+
+```python
+def calculate_performance_metrics(predictions, actual_values):
+    accuracy = (predictions == actual_values).mean()
+    logging.info(f"Accuracy: {accuracy}")
+    return accuracy
+```
+
+#### Detect anomalies:
+
+```python
+def detect_anomalies(predictions, threshold):
+    anomalies = predictions[predictions > threshold]
+    if len(anomalies) > 0:
+        logging.warning(f"Anomalies detected: {anomalies}")
+    return anomalies
+```
+
+### 7. Main Script (`src/main.py`)
+
+#### Import the necessary functions from the other modules:
+
+```python
+from data_collection import connect_mqtt
+from data_preprocessing import load_data, handle_missing_values, remove_outliers, scale_features
+from feature_engineering import create_lag_features, create_rolling_features, create_time_features
+from model_training import split_data, train_model, evaluate_model
+from model_inference import load_model, predict
+from monitoring import log_prediction, calculate_performance_metrics, detect_anomalies
+```
+
+#### Implement the main function to orchestrate the flow of data through the pipeline:
+
+```python
+def main():
+    # Data Collection
+    connect_mqtt("localhost", 1883, "meraki/sensors")
+
+    # Data Preprocessing
+    data = load_data("2023-01-01", "2023-12-31")
+    data = handle_missing_values(data)
+    data = remove_outliers(data)
+    data = scale_features(data)
+
+    # Feature Engineering
+    data = create_lag_features(data, [1, 2, 3])
+    data = create_rolling_features(data, 60)
+    data = create_time_features(data)
+
+    # Model Training
+    X_train, X_val, X_test, y_train, y_val, y_test = split_data(data, 'occupancy', test_size=0.2)
+    model = train_model(X_train, y_train)
+    mse, r2 = evaluate_model(model, X_val, y_val)
+    print(f"Validation MSE: {mse}, R-squared: {r2}")
+
+    # Model Inference
+    model_path = 'trained_model.pkl'
+    joblib.dump(model, model_path)
+    model = load_model(model_path)
+    input_data = load_data("2024-01-01", "2024-01-31")
+    predictions = predict(model, input_data)
+
+    # Monitoring and Logging
+    timestamp = datetime.now()
+    log_prediction(predictions, timestamp)
+    accuracy = calculate_performance_metrics(predictions, input_data['occupancy'])
+    anomalies = detect_anomalies(predictions, threshold=0.8)
+    print(f"Accuracy: {accuracy}, Anomalies: {anomalies}")
+
+if __name__ == "__main__":
+    main()
+```
+
+This guide provides an overview of the initial items and relevant codebase for each module in the `src` directory. It includes sample code snippets and explanations for each component, ensuring that you can understand and implement each part of the data pipeline effectively.
