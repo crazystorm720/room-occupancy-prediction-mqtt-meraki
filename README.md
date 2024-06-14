@@ -335,3 +335,113 @@ submission.to_csv('submission.csv', index=False)
 ```
 
 By following this detailed and code-focused workflow, you can effectively train, evaluate, and deploy gradient boosting models tailored for Meraki MQTT sensor data. This structured approach ensures that each step is well-defined and thoroughly documented, providing a clear path from data collection to model deployment and continuous improvement.
+
+---
+
+# Project Logic Overview
+
+## 1. Data Collection
+
+### Real-time Data Ingestion
+
+- **Objective**: Collect real-time sensor data from Meraki devices using MQTT.
+- **Workflow**:
+  1. **Connect to MQTT Broker**: Establish a connection to the MQTT broker using `paho-mqtt`.
+  2. **Subscribe to Topic**: Subscribe to the specified MQTT topic to receive sensor data.
+  3. **Handle Incoming Messages**: Process incoming MQTT messages to extract relevant data (e.g., temperature, humidity, chassis fan speed).
+  4. **Store Data**: Save the extracted data into TimescaleDB for further processing.
+
+### Batch Data Collection
+
+- **Objective**: Collect historical data for model training and evaluation.
+- **Workflow**:
+  1. **Retrieve Data**: Query TimescaleDB to retrieve sensor data for specified date ranges.
+  2. **Store Data**: Save the retrieved data locally in CSV format for preprocessing and feature engineering.
+
+## 2. Data Preprocessing
+
+- **Objective**: Clean and preprocess the collected sensor data to make it suitable for model training.
+- **Workflow**:
+  1. **Load Data**: Load data from TimescaleDB or CSV files.
+  2. **Handle Missing Values**: Use forward fill (`ffill`) method to handle missing values.
+  3. **Remove Outliers**: Apply statistical methods (e.g., IQR) to remove outliers.
+  4. **Normalize and Scale**: Normalize and scale sensor values using `StandardScaler` from `scikit-learn`.
+
+## 3. Feature Engineering
+
+- **Objective**: Create new features from the raw data to improve model performance.
+- **Workflow**:
+  1. **Create Time-based Features**: Extract features such as hour of the day, day of the week, and weekend indicator.
+  2. **Generate Lag Features**: Create lagged versions of the sensor data to capture temporal dependencies.
+  3. **Calculate Rolling Statistics**: Compute rolling averages and other statistics over defined time windows.
+  4. **Interaction Terms**: Create interaction terms like temperature-humidity index.
+
+## 4. Model Training
+
+- **Objective**: Train machine learning models to predict room occupancy based on the engineered features.
+- **Workflow**:
+  1. **Data Splitting**: Split the preprocessed data into training, validation, and test sets.
+  2. **Model Selection**: Choose an appropriate machine learning model (e.g., Gradient Boosting Classifier).
+  3. **Hyperparameter Tuning**: Use techniques like GridSearchCV to find the best hyperparameters.
+  4. **Model Training**: Train the model using the training set.
+  5. **Model Evaluation**: Evaluate the model on the validation set using metrics like accuracy and F1 score.
+
+## 5. Model Inference
+
+### Real-time Inference
+
+- **Objective**: Use the trained model to make real-time predictions on new sensor data.
+- **Workflow**:
+  1. **Receive New Data**: Collect new sensor data via MQTT in real-time.
+  2. **Preprocess Data**: Apply the same preprocessing steps used during training.
+  3. **Make Predictions**: Use the trained model to predict room occupancy based on the new data.
+
+### Batch Inference
+
+- **Objective**: Perform batch predictions on historical data for analysis and evaluation.
+- **Workflow**:
+  1. **Load Historical Data**: Load historical sensor data from TimescaleDB.
+  2. **Preprocess Data**: Apply the same preprocessing steps used during training.
+  3. **Make Predictions**: Use the trained model to predict room occupancy on the historical data.
+
+## 6. Monitoring and Logging
+
+- **Objective**: Monitor the model's performance over time, log predictions, and detect anomalies.
+- **Workflow**:
+  1. **Log Predictions**: Store model predictions along with timestamps for auditing and analysis.
+  2. **Performance Monitoring**: Calculate performance metrics (e.g., accuracy, F1 score) on new predictions.
+  3. **Anomaly Detection**: Identify anomalies in predictions based on predefined thresholds.
+
+## Integration and Flow
+
+### Main Script (`src/main.py`)
+
+- **Objective**: Orchestrate the entire workflow from data collection to model inference and monitoring.
+- **Workflow**:
+  1. **Data Collection**: Call functions from `data_collection.py` to start real-time data ingestion.
+  2. **Data Preprocessing**: Preprocess the collected data using functions from `data_preprocessing.py`.
+  3. **Feature Engineering**: Generate new features using functions from `feature_engineering.py`.
+  4. **Model Training**: Train and evaluate the model using functions from `model_training.py`.
+  5. **Model Inference**: Perform real-time and batch inference using functions from `model_inference.py`.
+  6. **Monitoring and Logging**: Log predictions and monitor performance using functions from `monitoring.py`.
+
+### Configuration (`config.yml`)
+
+- **Objective**: Centralize configuration settings for easy management and modification.
+- **Configuration Options**:
+  - MQTT broker details.
+  - Database connection settings.
+  - Meraki sensor information.
+  - Hyperparameters for model training.
+
+### Example Workflow
+
+1. **Initialize and Configure**: Start by configuring the MQTT broker, database, and Meraki sensors in `config.yml`.
+2. **Start Data Collection**: Run the main script to initiate real-time data collection from Meraki sensors via MQTT.
+3. **Preprocess Data**: Periodically preprocess the collected data to handle missing values and remove outliers.
+4. **Generate Features**: Apply feature engineering techniques to create new features from the preprocessed data.
+5. **Train Model**: Train the Gradient Boosting model using the engineered features and evaluate its performance.
+6. **Make Predictions**: Use the trained model to make real-time predictions on new sensor data and batch predictions on historical data.
+7. **Monitor and Log**: Continuously monitor the model's performance, log predictions, and detect any anomalies.
+
+By following this detailed and logical workflow, you can ensure that each component of the Room Occupancy Prediction project is accounted for and integrated seamlessly. This modular approach allows for easy maintenance, scalability, and potential enhancements in the future.
