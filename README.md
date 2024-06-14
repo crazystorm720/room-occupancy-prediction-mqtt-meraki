@@ -1,47 +1,49 @@
 # Room Occupancy Prediction Using MQTT Sensor Data from Meraki
 
-This project aims to predict room occupancy using sensor data from Meraki devices. MQTT is used for real-time data ingestion, focusing on chassis fan speed and environmental sensors (temperature, humidity) to build a predictive model using gradient boosting techniques.
+This project aims to predict room occupancy by leveraging real-time sensor data from Meraki devices. Utilizing MQTT for data ingestion, the focus is on chassis fan speed and environmental sensors (temperature, humidity) to develop a predictive model using gradient boosting techniques.
 
 ## Project Overview
 
 The Room Occupancy Prediction project encompasses the following key components:
-1. **Data Collection**: Collect real-time sensor data from Meraki devices using MQTT and store it in a database for further analysis.
-2. **Data Preprocessing**: Clean and preprocess the collected data, handle missing values, remove outliers, and perform feature scaling.
-3. **Feature Engineering**: Create new features based on the raw data to capture temporal dependencies, calculate rolling statistics, extract time-based features, and create interaction terms.
-4. **Model Training**: Train machine learning models using the preprocessed data and evaluate their performance using appropriate metrics.
-5. **Model Inference**: Apply the trained models to make real-time predictions on new sensor data and perform batch inference on historical data.
-6. **Monitoring and Logging**: Monitor the model's performance over time, log predictions for auditing and analysis, and detect anomalies or drift.
+
+1. **Data Collection**: Gather real-time sensor data from Meraki devices using MQTT, storing it in a database for subsequent analysis.
+2. **Data Preprocessing**: Clean and preprocess the data, addressing missing values, removing outliers, and performing feature scaling to ensure data quality.
+3. **Feature Engineering**: Enhance raw data by creating new features that capture temporal dependencies, calculate rolling statistics, extract time-based features, and generate interaction terms.
+4. **Model Training**: Develop machine learning models using gradient boosting techniques on the preprocessed data, evaluating their performance with appropriate metrics.
+5. **Model Inference**: Deploy trained models for real-time predictions on new sensor data and conduct batch inference on historical data.
+6. **Monitoring and Logging**: Continuously monitor the model’s performance, log predictions for auditing and analysis, and detect any anomalies or drift.
 
 ## Getting Started
 
-To get started with the Room Occupancy Prediction project, follow these steps:
+To embark on the Room Occupancy Prediction project, follow these steps:
 
-1. **Prerequisites**: Ensure that you have Docker, Conda, Python, and Git installed on your system.
-2. **Installation**: Clone the project repository and set up the project environment using Docker and Conda. Refer to the [Installation Guide](docs/installation.md) for detailed instructions.
-3. **Data Collection**: Set up the data collection pipeline to ingest real-time sensor data from Meraki devices using MQTT. Refer to the [Data Collection Guide](docs/data-collection.md) for more information.
-4. **Data Preprocessing**: Preprocess the collected data using the provided scripts and guidelines. Refer to the [Data Preprocessing Guide](docs/data-preprocessing.md) for details.
-5. **Feature Engineering**: Generate new features from the preprocessed data using the feature engineering techniques outlined in the [Feature Engineering Guide](docs/feature-engineering.md).
-6. **Model Training**: Train machine learning models using the preprocessed data and evaluate their performance. Refer to the [Model Training Guide](docs/model-training.md) for instructions.
-7. **Model Inference**: Apply the trained models to make real-time predictions and perform batch inference. Refer to the [Model Inference Guide](docs/model-inference.md) for more information.
-8. **Monitoring and Logging**: Set up monitoring and logging mechanisms to track the model's performance and detect anomalies. Refer to the [Monitoring and Logging Guide](docs/monitoring-logging.md) for details.
+1. **Prerequisites**: Ensure you have Docker, Conda, Python, and Git installed on your system.
+2. **Installation**: Clone the project repository and set up the environment using Docker and Conda. Refer to the [Installation Guide](docs/installation.md) for detailed instructions.
+3. **Data Collection**: Establish the data collection pipeline to ingest real-time sensor data from Meraki devices via MQTT. Refer to the [Data Collection Guide](docs/data-collection.md) for comprehensive instructions.
+4. **Data Preprocessing**: Preprocess the collected data using provided scripts and guidelines. Detailed steps can be found in the [Data Preprocessing Guide](docs/data-preprocessing.md).
+5. **Feature Engineering**: Create new features from the preprocessed data as outlined in the [Feature Engineering Guide](docs/feature-engineering.md).
+6. **Model Training**: Train machine learning models using gradient boosting techniques and evaluate their performance as described in the [Model Training Guide](docs/model-training.md).
+7. **Model Inference**: Utilize trained models to make real-time predictions and perform batch inference. Refer to the [Model Inference Guide](docs/model-inference.md) for more details.
+8. **Monitoring and Logging**: Implement monitoring and logging mechanisms to track model performance and detect anomalies. Instructions can be found in the [Monitoring and Logging Guide](docs/monitoring-logging.md).
 
 ## Technologies Used
 
-1. **MQTT**: Lightweight messaging protocol for real-time data collection from Meraki sensors.
-2. **Meraki Sensors**: Environmental sensors providing real-time data streams.
-3. **TimescaleDB**: Time-series database optimized for storing and querying time-stamped data.
-4. **Python**: Programming language for data processing, analysis, and machine learning model development.
-5. **scikit-learn**: Python library for machine learning, used for building and training models.
-6. **Docker**: Platform for containerizing applications to ensure consistent environments across deployments.
+1. **MQTT**: A lightweight messaging protocol used for real-time data collection from Meraki sensors.
+2. **Meraki Sensors**: Environmental sensors providing continuous data streams.
+3. **TimescaleDB**: A time-series database optimized for storing and querying time-stamped data.
+4. **Python**: The primary programming language for data processing, analysis, and machine learning model development.
+5. **scikit-learn**: A Python library used for building and training machine learning models, particularly focusing on gradient boosting techniques.
+6. **Docker**: A platform for containerizing applications, ensuring consistent environments across different deployments.
 
 ## Skills and Capabilities
 
-By working on this project, you will gain valuable skills in:
-1. **Internet of Things (IoT)**: Collecting and processing data from IoT devices using MQTT.
-2. **Data Analysis and Preprocessing**: Handling missing values, removing outliers, and performing feature engineering.
-3. **Machine Learning**: Building and training models using Python and scikit-learn.
-4. **Real-time Data Processing**: Analyzing data in real-time using MQTT and TimescaleDB.
-5. **Containerization and Deployment**: Containerizing applications with Docker for consistent deployments.
+Engaging with this project will help you develop and enhance skills in the following areas:
+
+1. **Internet of Things (IoT)**: Techniques for collecting and processing data from IoT devices using MQTT.
+2. **Data Analysis and Preprocessing**: Skills in handling missing values, removing outliers, and performing feature engineering.
+3. **Machine Learning**: Proficiency in building and training models using gradient boosting techniques with Python and scikit-learn.
+4. **Real-time Data Processing**: Competence in analyzing data in real-time using MQTT and TimescaleDB.
+5. **Containerization and Deployment**: Expertise in containerizing applications with Docker to ensure consistent deployments.
 
 ## Project Structure
 
@@ -86,79 +88,108 @@ To set up the project, follow the instructions in the [PROJECT_SETUP.md](PROJECT
 ## Data Collection
 
 ### Real-time Data Ingestion
-- **Tools**: MQTT broker, Meraki sensors.
-- **Process**: Collect real-time data on fan speed, temperature, and humidity.
-- **Implementation**: The `data_collection.py` file contains functions to connect to the MQTT broker, process MQTT messages, and store the collected data in a database.
+- **Tools**: Utilizes an MQTT broker in conjunction with Meraki sensors.
+- **Process**: Collects real-time data pertaining to fan speed, temperature, and humidity.
+- **Implementation**: The `data_collection.py` script is responsible for establishing a connection to the MQTT broker, processing incoming MQTT messages, and storing the collected data within a database.
 
 ### Batch Data Collection
-- **Tools**: TimescaleDB.
-- **Process**: Aggregating data over specified periods for batch inference.
-- **Implementation**: The `data_collection.py` file includes functions to retrieve data from the database for a specified date range.
+- **Tools**: Employs TimescaleDB for data aggregation.
+- **Process**: Aggregates data over specified intervals for batch inference purposes.
+- **Implementation**: The `data_collection.py` script includes functions designed to retrieve data from the database for specified date ranges, ensuring efficient batch processing.
 
 ## Data Preprocessing
 
 ### Steps
-- Handling missing values.
-- Removing outliers.
-- Feature engineering (lag features, rolling statistics, time-based features).
-- Normalization and scaling.
-- **Implementation**: The `data_preprocessing.py` file contains functions to load data, handle missing values, remove outliers, and perform feature scaling.
+- **Handling Missing Values**: Implement strategies for managing missing data to maintain data integrity.
+- **Removing Outliers**: Identify and eliminate outliers to ensure data consistency.
+- **Feature Engineering**: Create advanced features such as lag features, rolling statistics, and time-based features to enhance model performance.
+- **Normalization and Scaling**: Apply normalization and scaling techniques to standardize data.
+- **Implementation**: The `data_preprocessing.py` script encompasses functions for loading data, addressing missing values, removing outliers, and performing feature scaling.
 
 ## Feature Engineering
 
-- **Lag Features**: Capture temporal dependencies.
-- **Rolling Statistics**: Calculate moving averages and other rolling metrics.
-- **Time-Based Features**: Extract features like hour of the day and day of the week.
-- **Interaction Terms**: Combine features to capture interactions.
-- **Implementation**: The `feature_engineering.py` file includes functions to create lag features, rolling statistics, time-based features, and interaction terms.
+- **Lag Features**: Capture temporal dependencies within the data.
+- **Rolling Statistics**: Calculate moving averages and other rolling metrics to capture trends.
+- **Time-Based Features**: Extract temporal features such as hour of the day and day of the week to enhance predictive accuracy.
+- **Interaction Terms**: Combine multiple features to capture complex interactions.
+- **Implementation**: The `feature_engineering.py` script includes functions for generating lag features, rolling statistics, time-based features, and interaction terms, facilitating comprehensive feature engineering.
 
 ## Model Training
 
 ### Training Process
-- **Training Set**: Used to train the model.
-- **Validation Set**: Used to tune hyperparameters and avoid overfitting.
-- **Test Set**: Used to evaluate the final model's performance.
-- **Tools**: scikit-learn, hyperparameter tuning libraries.
-- **Implementation**: The `model_training.py` file contains functions to split the data, train the machine learning model, and evaluate its performance.
+- **Training Set**: Used for model training to learn patterns in the data.
+- **Validation Set**: Employed to tune hyperparameters and prevent overfitting.
+- **Test Set**: Used to evaluate the final model's performance and generalization capability.
+- **Tools**: Leveraging scikit-learn and hyperparameter tuning libraries to optimize model performance.
+- **Implementation**: The `model_training.py` script includes functions for data splitting, model training, and performance evaluation, ensuring a rigorous training process.
 
 ### Metrics for Evaluation
-- Regression: Mean Squared Error (MSE), Root Mean Squared Error (RMSE), R-squared.
+- **Regression**: Evaluate model performance using metrics such as Mean Squared Error (MSE), Root Mean Squared Error (RMSE), and R-squared.
 
 ## Model Inference
 
 ### Real-time Inference
-- Collect real-time data via MQTT.
-- Preprocess data and apply the trained model to make predictions.
-- **Implementation**: The `model_inference.py` file includes functions to load the trained model, preprocess input data, and make predictions in real-time.
+- **Process**: Collects real-time data via MQTT, preprocesses it, and applies the trained model to make immediate predictions.
+- **Implementation**: The `model_inference.py` script contains functions to load the trained model, preprocess input data, and perform real-time predictions efficiently.
 
 ### Batch Inference
-- Aggregate data over a period, preprocess, and predict.
-- **Implementation**: The `model_inference.py` file also contains functions to perform batch inference on aggregated data.
+- **Process**: Aggregates data over specified periods, preprocesses it, and applies the trained model for batch predictions.
+- **Implementation**: The `model_inference.py` script also includes functions for batch inference, ensuring scalability and efficiency.
 
 ## Monitoring and Logging
 
-- **Log Predictions**: Store predictions for future analysis and auditing.
-- **Monitor Performance**: Track model performance over time to detect drift and degradation.
-- **Implementation**: The `monitoring.py` file includes functions to log predictions, calculate performance metrics, and detect anomalies.
+- **Log Predictions**: Store predictions for future analysis and auditing, ensuring traceability.
+- **Monitor Performance**: Continuously track model performance to detect drift and degradation, maintaining model reliability.
+- **Implementation**: The `monitoring.py` script includes functions for logging predictions, calculating performance metrics, and detecting anomalies, ensuring robust monitoring and logging mechanisms.
 
 ## Advanced Techniques
 
-- **Feature Selection**: Identify the most important features to reduce dimensionality.
-- **Ensemble Methods**: Combine predictions from multiple models to improve accuracy.
-- **Cross-Validation**: Use cross-validation techniques to ensure generalization.
+- **Feature Selection**: Utilize techniques to identify the most important features, reducing dimensionality and enhancing model performance.
+- **Ensemble Methods**: Combine predictions from multiple models to improve accuracy and robustness.
+- **Cross-Validation**: Employ cross-validation techniques to ensure model generalization and prevent overfitting.
+- **Implementation**: Integrate advanced techniques into relevant scripts (e.g., `feature_engineering.py`, `model_training.py`) to enhance the overall model development process.
 
 ## Example Project Walkthrough
 
 ### Objective
-Predicting room occupancy using chassis fan speed, temperature, and humidity.
+Predict room occupancy using data on chassis fan speed, temperature, and humidity.
 
 ### Steps
-1. **Data Collection**
-2. **Data Preprocessing**
-3. **Feature Engineering**
-4. **Model Training and Evaluation**
-5. **Real-time and Batch Inference**
-6. **Monitoring and Logging**
+
+#### 1. Data Collection
+
+- **Real-time Data Ingestion**: Utilize an MQTT broker to collect real-time data from Meraki sensors on fan speed, temperature, and humidity. The data is processed and stored in a TimescaleDB database.
+- **Batch Data Collection**: Aggregate sensor data over specified intervals for batch processing and inference. This data is also stored in TimescaleDB for efficient retrieval and analysis.
+
+#### 2. Data Preprocessing
+
+- **Handling Missing Values**: Implement strategies to manage and impute missing data to ensure dataset completeness.
+- **Removing Outliers**: Identify and remove outliers to enhance data quality and model accuracy.
+- **Normalization and Scaling**: Apply normalization and scaling techniques to standardize the dataset, facilitating better model performance.
+
+#### 3. Feature Engineering
+
+- **Lag Features**: Create features that capture temporal dependencies in the data, such as previous values of fan speed, temperature, and humidity.
+- **Rolling Statistics**: Calculate moving averages and other rolling metrics to capture trends and patterns over time.
+- **Time-Based Features**: Extract features like hour of the day and day of the week to incorporate temporal context into the model.
+- **Interaction Terms**: Generate features that combine multiple variables to capture complex interactions that may affect room occupancy.
+
+#### 4. Model Training and Evaluation
+
+- **Training Set**: Use this set to train machine learning models, learning patterns and relationships in the data.
+- **Validation Set**: Utilize this set to tune hyperparameters and avoid overfitting, ensuring the model generalizes well to new data.
+- **Test Set**: Evaluate the final model's performance using this set to ensure it meets the desired accuracy and reliability.
+- **Metrics for Evaluation**: Use metrics such as Mean Squared Error (MSE), Root Mean Squared Error (RMSE), and R-squared to assess model performance.
+
+#### 5. Real-time and Batch Inference
+
+- **Real-time Inference**: Collect real-time sensor data via MQTT, preprocess it, and apply the trained model to make instant occupancy predictions.
+- **Batch Inference**: Aggregate sensor data over specified periods, preprocess it, and use the trained model to predict room occupancy in batches.
+
+#### 6. Monitoring and Logging
+
+- **Log Predictions**: Store predictions for future analysis and auditing to maintain a record of model outputs.
+- **Monitor Performance**: Continuously track model performance over time to detect any drift or degradation, ensuring sustained accuracy and reliability.
 
 ## References
 
