@@ -49,10 +49,26 @@ By working on this project, you will gain valuable skills in:
 room-occupancy-prediction/
 ├── data/
 ├── docs/
+│   ├── installation.md
+│   ├── data-collection.md
+│   ├── data-preprocessing.md
+│   ├── feature-engineering.md
+│   ├── model-training.md
+│   ├── model-inference.md
+│   ├── monitoring-logging.md
+│   └── project-structure.md
 ├── notebooks/
 ├── src/
+│   ├── data_collection.py
+│   ├── data_preprocessing.py
+│   ├── feature_engineering.py
+│   ├── model_training.py
+│   ├── model_inference.py
+│   ├── monitoring.py
+│   ├── utils.py
+│   └── main.py
 ├── tests/
-└── ...
+└── README.md
 ```
 
 - `data`: Contains raw and processed data.
@@ -170,7 +186,9 @@ test_data = pd.read_csv('test_data.csv')
 ```python
 # Handle missing values
 train_data.fillna(method='ffill', inplace=True)
-test_data.fillna(method='ffill', inplace=True)
+test_data.fillna
+
+(method='ffill', inplace=True)
 
 # Convert timestamps to datetime format
 train_data['timestamp'] = pd.to_datetime(train_data['timestamp'])
@@ -200,9 +218,7 @@ plt.show()
 - **Example Problem**: Predicting room occupancy based on sensor data.
 
 ### Feature Engineering
-```
-
-python
+```python
 # Create time-based features
 train_data['hour'] = train_data['timestamp'].dt.hour
 train_data['day_of_week'] = train_data['timestamp'].dt.dayofweek
